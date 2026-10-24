@@ -30,7 +30,45 @@ Este proyecto utiliza versionado semántico (Semantic Versioning) para identific
 
 ### Security
 
-- Las mejoras de seguridad, las actualizaciones de dependencias y las correcciones relacionadas con vulnerabilidades se registrarán aquí.
+- Las mejoras de seguridad, las actualizaciones de dependencias y las correcciones relacionadas con vulnerabilidades se registrarán en esta sección.
+
+---
+
+## [1.2.0] - 2026-10-23
+
+### Added
+
+- Integración de `@react-pdf/renderer` para generar y visualizar documentos PDF.
+- Vista previa de las cotizaciones en PDF dentro de la aplicación.
+- Actualización automática del documento PDF cuando cambian los datos de la cotización, con un intervalo de espera para optimizar el proceso.
+- Mensaje de error cuando ocurre un problema durante la generación del PDF.
+- Información accesible para identificar la vista previa del documento.
+
+### Changed
+
+- Actualización del diseño de los documentos PDF para alinearlos con la identidad visual de SatCore Solutions.
+- Incorporación del azul corporativo `#132A8E` en títulos, encabezados de tablas y totales.
+- Mejora de la presentación de los datos del emisor y del cliente.
+- Refinamiento de la tabla de productos y servicios, incluyendo cantidades, precios unitarios e importes.
+- Mejora de la jerarquía visual del subtotal, los descuentos, el IVA y el total final.
+- Actualización de la presentación de las condiciones de pago, las notas y el pie de página de los documentos PDF.
+- Adaptación de la página principal a la plantilla compartida de las microaplicaciones de SatCore Solutions.
+- Actualización del encabezado para mostrar el nombre Generador de cotizaciones y la identidad de SatCore Solutions.
+- Adaptación de los botones de descarga y vista previa a los estilos compartidos de la interfaz.
+- Mejora de la presentación adaptable de la vista previa del documento PDF.
+
+### Fixed
+
+- Corrección del uso de la propiedad `title` en `PDFViewer`, que no está admitida por los tipos de `@react-pdf/renderer`.
+- Ajuste de los estilos del visor PDF para utilizar propiedades compatibles con el componente.
+
+### Removed
+
+- Eliminación de las clases de estilo heredadas de los componentes de descarga y vista previa cuando fueron sustituidas por los estilos compartidos de la interfaz.
+
+### Security
+
+- Sin cambios de seguridad específicos documentados en esta versión.
 
 ---
 
@@ -61,6 +99,6 @@ Este proyecto utiliza versionado semántico (Semantic Versioning) para identific
 
 **Mantenimiento:** SatCore Solutions
 
-**Repositorio:** https://github.com/satcoresolutions/satcore-generador-cotizaciones
+**Repositorio:** [https://github.com/satcoresolutions/satcore-generador-cotizaciones](https://github.com/satcoresolutions/satcore-generador-cotizaciones)
 
 **Licencia:** SatCore Solutions Attribution License — SCSAL 1.0

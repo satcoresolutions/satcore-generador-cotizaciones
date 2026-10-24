@@ -1,68 +1,217 @@
-import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import {
+  Document,
+  Image,
+  Page,
+  StyleSheet,
+  Text,
+  View,
+} from "@react-pdf/renderer";
 import type { Quote, Totals } from "@/lib/types";
 import { addDays, formatCOP, formatDate } from "@/lib/calc";
 
-const ACCENT = "#1f4fd8";
-const INK = "#1b1f27";
-const MUTED = "#6b7280";
-const LINE = "#e5e7eb";
+const PRIMARY = "#132A8E";
+const FOREGROUND = "#1B1F27";
+const MUTED = "#6B7280";
+const BORDER = "#E5E7EB";
+const SURFACE = "#F5F6FA";
+const WHITE = "#FFFFFF";
 
 const s = StyleSheet.create({
-  page: { padding: 40, paddingBottom: 60, fontSize: 10, fontFamily: "Helvetica", color: INK },
-  header: { flexDirection: "row", justifyContent: "space-between", marginBottom: 24 },
-  logo: { width: 90, height: 60, objectFit: "contain", marginBottom: 6 },
-  issuerName: { fontSize: 15, fontFamily: "Helvetica-Bold" },
-  small: { fontSize: 9, color: MUTED, marginTop: 2 },
-  quoteBox: { alignItems: "flex-end" },
-  title: { fontSize: 22, fontFamily: "Helvetica-Bold", color: ACCENT },
-  quoteMeta: { marginTop: 4, fontSize: 9.5, textAlign: "right", color: MUTED },
-  quoteMetaStrong: { color: INK, fontFamily: "Helvetica-Bold" },
-  clientBox: {
-    backgroundColor: "#f5f7fb",
-    borderRadius: 4,
-    padding: 12,
-    marginBottom: 20,
+  page: {
+    paddingTop: 38,
+    paddingHorizontal: 40,
+    paddingBottom: 58,
+    fontSize: 9,
+    fontFamily: "Helvetica",
+    color: FOREGROUND,
+    backgroundColor: WHITE,
   },
-  label: { fontSize: 8, color: MUTED, textTransform: "uppercase", marginBottom: 4 },
-  clientName: { fontSize: 12, fontFamily: "Helvetica-Bold" },
+
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 26,
+    gap: 16,
+  },
+
+  issuer: {
+    maxWidth: "58%",
+    flexGrow: 1,
+  },
+
+  logo: {
+    width: 90,
+    height: 54,
+    objectFit: "contain",
+    marginBottom: 9,
+  },
+
+  issuerName: {
+    fontSize: 15,
+    fontFamily: "Helvetica-Bold",
+    color: PRIMARY,
+    marginBottom: 3,
+  },
+
+  small: {
+    fontSize: 8.5,
+    color: MUTED,
+    marginTop: 3,
+    lineHeight: 1.35,
+  },
+
+  quoteBox: {
+    alignItems: "flex-end",
+    maxWidth: "42%",
+  },
+
+  title: {
+    fontSize: 20,
+    fontFamily: "Helvetica-Bold",
+    color: PRIMARY,
+    marginBottom: 5,
+  },
+
+  quoteMeta: {
+    marginTop: 4,
+    fontSize: 8.5,
+    textAlign: "right",
+    color: MUTED,
+  },
+
+  quoteMetaStrong: {
+    color: FOREGROUND,
+    fontFamily: "Helvetica-Bold",
+  },
+
+  clientBox: {
+    backgroundColor: SURFACE,
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 6,
+    padding: 13,
+    marginBottom: 22,
+  },
+
+  label: {
+    fontSize: 7.5,
+    color: MUTED,
+    textTransform: "uppercase",
+    letterSpacing: 0.7,
+    marginBottom: 5,
+  },
+
+  clientName: {
+    fontSize: 11,
+    fontFamily: "Helvetica-Bold",
+    color: FOREGROUND,
+    marginBottom: 2,
+  },
+
   tableHead: {
     flexDirection: "row",
-    backgroundColor: ACCENT,
-    color: "#ffffff",
-    paddingVertical: 6,
+    alignItems: "center",
+    backgroundColor: PRIMARY,
+    color: WHITE,
+    paddingVertical: 9,
     paddingHorizontal: 8,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
     fontFamily: "Helvetica-Bold",
-    fontSize: 9,
+    fontSize: 8,
   },
+
   row: {
     flexDirection: "row",
-    paddingVertical: 7,
+    alignItems: "flex-start",
+    paddingVertical: 9,
     paddingHorizontal: 8,
     borderBottomWidth: 1,
-    borderBottomColor: LINE,
+    borderBottomColor: BORDER,
   },
-  cNum: { width: "6%" },
-  cDesc: { width: "46%", paddingRight: 6 },
-  cQty: { width: "10%", textAlign: "right" },
-  cPrice: { width: "19%", textAlign: "right" },
-  cTotal: { width: "19%", textAlign: "right" },
-  totalsWrap: { alignItems: "flex-end", marginTop: 14 },
-  totals: { width: "46%" },
-  totalRow: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 3 },
+
+  cNum: {
+    width: "6%",
+  },
+
+  cDesc: {
+    width: "42%",
+    paddingRight: 8,
+  },
+
+  cQty: {
+    width: "12%",
+    textAlign: "right",
+  },
+
+  cPrice: {
+    width: "20%",
+    textAlign: "right",
+    paddingLeft: 4,
+  },
+
+  cTotal: {
+    width: "20%",
+    textAlign: "right",
+    paddingLeft: 4,
+    fontFamily: "Helvetica-Bold",
+  },
+
+  totalsWrap: {
+    alignItems: "flex-end",
+    marginTop: 16,
+  },
+
+  totals: {
+    width: "52%",
+  },
+
+  totalRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 5,
+    fontSize: 8.5,
+  },
+
+  totalLabel: {
+    color: MUTED,
+  },
+
   grand: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 4,
-    paddingVertical: 7,
-    paddingHorizontal: 8,
-    backgroundColor: ACCENT,
-    color: "#ffffff",
+    alignItems: "center",
+    marginTop: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: PRIMARY,
+    color: WHITE,
+    borderRadius: 4,
     fontFamily: "Helvetica-Bold",
-    fontSize: 12,
+    fontSize: 10.5,
   },
-  section: { marginTop: 22 },
-  sectionTitle: { fontSize: 9, fontFamily: "Helvetica-Bold", color: ACCENT, marginBottom: 4, textTransform: "uppercase" },
-  paragraph: { lineHeight: 1.45, color: INK },
+
+  section: {
+    marginTop: 22,
+  },
+
+  sectionTitle: {
+    fontSize: 8,
+    fontFamily: "Helvetica-Bold",
+    color: PRIMARY,
+    marginBottom: 7,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+
+  paragraph: {
+    fontSize: 9,
+    lineHeight: 1.5,
+    color: FOREGROUND,
+  },
+
   footer: {
     position: "absolute",
     bottom: 24,
@@ -70,11 +219,12 @@ const s = StyleSheet.create({
     right: 40,
     flexDirection: "row",
     justifyContent: "space-between",
-    fontSize: 8,
+    alignItems: "center",
+    fontSize: 7.5,
     color: MUTED,
     borderTopWidth: 1,
-    borderTopColor: LINE,
-    paddingTop: 6,
+    borderTopColor: BORDER,
+    paddingTop: 8,
   },
 });
 
@@ -88,34 +238,79 @@ export default function QuotePDF({ quote, totals }: Props) {
   const { issuer, client } = quote;
 
   return (
-    <Document title={`Cotización ${quote.number}`} author={issuer.name || "Cotizaciones"}>
+    <Document
+      title={`Cotización ${quote.number}`}
+      author={issuer.name || "SatCore Solutions"}
+      subject="Cotización comercial"
+    >
       <Page size="A4" style={s.page}>
         <View style={s.header}>
-          <View style={{ maxWidth: "58%" }}>
-            {quote.logo ? <Image src={quote.logo} style={s.logo} /> : null}
-            <Text style={s.issuerName}>{issuer.name || "Tu empresa"}</Text>
-            {issuer.nit ? <Text style={s.small}>NIT: {issuer.nit}</Text> : null}
-            {issuer.address ? <Text style={s.small}>{issuer.address}</Text> : null}
-            {issuer.phone ? <Text style={s.small}>Tel: {issuer.phone}</Text> : null}
-            {issuer.email ? <Text style={s.small}>{issuer.email}</Text> : null}
+          <View style={s.issuer}>
+            {quote.logo ? (
+              <Image src={quote.logo} style={s.logo} />
+            ) : null}
+
+            <Text style={s.issuerName}>
+              {issuer.name || "Tu empresa"}
+            </Text>
+
+            {issuer.nit ? (
+              <Text style={s.small}>NIT: {issuer.nit}</Text>
+            ) : null}
+
+            {issuer.address ? (
+              <Text style={s.small}>{issuer.address}</Text>
+            ) : null}
+
+            {issuer.phone ? (
+              <Text style={s.small}>Tel.: {issuer.phone}</Text>
+            ) : null}
+
+            {issuer.email ? (
+              <Text style={s.small}>{issuer.email}</Text>
+            ) : null}
           </View>
+
           <View style={s.quoteBox}>
             <Text style={s.title}>COTIZACIÓN</Text>
+
             <Text style={s.quoteMeta}>
-              N.º <Text style={s.quoteMetaStrong}>{quote.number}</Text>
+              N.º{" "}
+              <Text style={s.quoteMetaStrong}>{quote.number}</Text>
             </Text>
-            <Text style={s.quoteMeta}>Fecha: {formatDate(quote.date)}</Text>
-            <Text style={s.quoteMeta}>Válida hasta: {formatDate(validUntil)}</Text>
+
+            <Text style={s.quoteMeta}>
+              Fecha: {formatDate(quote.date)}
+            </Text>
+
+            <Text style={s.quoteMeta}>
+              Válida hasta: {formatDate(validUntil)}
+            </Text>
           </View>
         </View>
 
         <View style={s.clientBox}>
           <Text style={s.label}>Cotizado a</Text>
-          <Text style={s.clientName}>{client.name || "Cliente"}</Text>
-          {client.nit ? <Text style={s.small}>NIT / CC: {client.nit}</Text> : null}
-          {client.address ? <Text style={s.small}>{client.address}</Text> : null}
-          {client.phone ? <Text style={s.small}>Tel: {client.phone}</Text> : null}
-          {client.email ? <Text style={s.small}>{client.email}</Text> : null}
+
+          <Text style={s.clientName}>
+            {client.name || "Cliente"}
+          </Text>
+
+          {client.nit ? (
+            <Text style={s.small}>NIT / CC: {client.nit}</Text>
+          ) : null}
+
+          {client.address ? (
+            <Text style={s.small}>{client.address}</Text>
+          ) : null}
+
+          {client.phone ? (
+            <Text style={s.small}>Tel.: {client.phone}</Text>
+          ) : null}
+
+          {client.email ? (
+            <Text style={s.small}>{client.email}</Text>
+          ) : null}
         </View>
 
         <View style={s.tableHead}>
@@ -125,34 +320,48 @@ export default function QuotePDF({ quote, totals }: Props) {
           <Text style={s.cPrice}>Precio unit.</Text>
           <Text style={s.cTotal}>Total</Text>
         </View>
-        {quote.items.map((it, i) => (
-          <View key={it.id} style={s.row} wrap={false}>
-            <Text style={s.cNum}>{i + 1}</Text>
-            <Text style={s.cDesc}>{it.description || "—"}</Text>
-            <Text style={s.cQty}>{it.quantity}</Text>
-            <Text style={s.cPrice}>{formatCOP(it.unitPrice)}</Text>
-            <Text style={s.cTotal}>{formatCOP(it.quantity * it.unitPrice)}</Text>
+
+        {quote.items.map((item, index) => (
+          <View key={item.id} style={s.row} wrap={false}>
+            <Text style={s.cNum}>{index + 1}</Text>
+            <Text style={s.cDesc}>
+              {item.description || "—"}
+            </Text>
+            <Text style={s.cQty}>{item.quantity}</Text>
+            <Text style={s.cPrice}>
+              {formatCOP(item.unitPrice)}
+            </Text>
+            <Text style={s.cTotal}>
+              {formatCOP(item.quantity * item.unitPrice)}
+            </Text>
           </View>
         ))}
 
         <View style={s.totalsWrap} wrap={false}>
           <View style={s.totals}>
             <View style={s.totalRow}>
-              <Text>Subtotal</Text>
+              <Text style={s.totalLabel}>Subtotal</Text>
               <Text>{formatCOP(totals.subtotal)}</Text>
             </View>
+
             {quote.discountPct > 0 ? (
               <View style={s.totalRow}>
-                <Text>Descuento ({quote.discountPct}%)</Text>
+                <Text style={s.totalLabel}>
+                  Descuento ({quote.discountPct}%)
+                </Text>
                 <Text>- {formatCOP(totals.discount)}</Text>
               </View>
             ) : null}
+
             {quote.taxPct > 0 ? (
               <View style={s.totalRow}>
-                <Text>IVA ({quote.taxPct}%)</Text>
+                <Text style={s.totalLabel}>
+                  IVA ({quote.taxPct}%)
+                </Text>
                 <Text>{formatCOP(totals.tax)}</Text>
               </View>
             ) : null}
+
             <View style={s.grand}>
               <Text>TOTAL</Text>
               <Text>{formatCOP(totals.total)}</Text>
@@ -176,9 +385,15 @@ export default function QuotePDF({ quote, totals }: Props) {
 
         <View style={s.footer} fixed>
           <Text>
-            {issuer.name} · Cotización {quote.number}
+            {issuer.name || "SatCore Solutions"} · Cotización{" "}
+            {quote.number}
           </Text>
-          <Text render={({ pageNumber, totalPages }) => `Página ${pageNumber} de ${totalPages}`} />
+
+          <Text
+            render={({ pageNumber, totalPages }) =>
+              `Página ${pageNumber} de ${totalPages}`
+            }
+          />
         </View>
       </Page>
     </Document>
